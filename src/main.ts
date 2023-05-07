@@ -1,13 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { JwtService } from '@nestjs/jwt';
-//const { createProxyMiddleware } = require('http-proxy-middleware');
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { jwtConstants } from './constants';
 import { extractTokenFromHeader } from './functions';
 const SERVICE_URL = 'http://localhost:3002';
-
-//localhost:3002/book
 const ROUTES = [
   {
     url: '/login',
@@ -29,9 +26,6 @@ const ROUTES = [
     url: '/book',
     auth: true,
     creditCheck: true,
-    /* onProxyReq: (clientRequest, req) => {
-      return false;
-    },*/
     proxy: {
       target: `${SERVICE_URL}`,
       changeOrigin: true,
@@ -66,9 +60,6 @@ async function bootstrap() {
       },
     }),
   );
-  /*ROUTES.forEach((r: any) => {
-    app.use(r.url, createProxyMiddleware(r.proxy));
-  });*/
   await app.listen(3004);
 }
 bootstrap();
