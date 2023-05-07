@@ -4,9 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { jwtConstants } from './constants';
 import { extractTokenFromHeader } from './functions';
+import { auth_routes } from './routes/auth-routes/auth-routes';
+import { book_routes } from './routes/book-routes/book-routes';
 const SERVICE_URL = 'http://localhost:3002';
-const ROUTES = [
-  {
+const ROUTES = [...book_routes];
+const AUTH_ROUTES = [
+  ...auth_routes,
+  /*{
     url: '/login',
     auth: false,
     creditCheck: false,
@@ -33,7 +37,7 @@ const ROUTES = [
         [`^/premium`]: '',
       },
     },
-  },
+  },*/
 ];
 const jwtService: JwtService = new JwtService();
 
@@ -41,8 +45,17 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: false,
   });
+  AUTH_ROUTES.forEach((route) => {
+    app.use(
+      route.url,
+      createProxyMiddleware({
+        target: SERVICE_URL,
+        changeOrigin: true,
+      }),
+    );
+  });
   app.use(
-    '/book',
+    '/book/**',
     createProxyMiddleware({
       target: SERVICE_URL,
       changeOrigin: true,
@@ -60,6 +73,64 @@ async function bootstrap() {
       },
     }),
   );
+  app.use(
+    '/profile/**',
+    createProxyMiddleware({
+      target: SERVICE_URL,
+      changeOrigin: true,
+      onProxyReq: (clientRequest, req, res) => {
+        const token = clientRequest.getHeaders().authorization;
+        if (!token) {
+          return res.status(401).send('Unauthorized');
+        }
+        const result = jwtService.verifyAsync(extractTokenFromHeader(token), {
+          secret: jwtConstants.secret,
+        });
+        result.catch(() => {
+          return res.status(401).send('Unauthorized');
+        });
+      },
+    }),
+  );
+  app.use(
+    '/role/**',
+    createProxyMiddleware({
+      target: SERVICE_URL,
+      changeOrigin: true,
+      onProxyReq: (clientRequest, req, res) => {
+        const token = clientRequest.getHeaders().authorization;
+        if (!token) {
+          return res.status(401).send('Unauthorized');
+        }
+        const result = jwtService.verifyAsync(extractTokenFromHeader(token), {
+          secret: jwtConstants.secret,
+        });
+        result.catch(() => {
+          return res.status(401).send('Unauthorized');
+        });
+      },
+    }),
+  );
+  app.use(
+    '/user/**',
+    createProxyMiddleware({
+      target: SERVICE_URL,
+      changeOrigin: true,
+      onProxyReq: (clientRequest, req, res) => {
+        const token = clientRequest.getHeaders().authorization;
+        if (!token) {
+          return res.status(401).send('Unauthorized');
+        }
+        const result = jwtService.verifyAsync(extractTokenFromHeader(token), {
+          secret: jwtConstants.secret,
+        });
+        result.catch(() => {
+          return res.status(401).send('Unauthorized');
+        });
+      },
+    }),
+  );
+
   await app.listen(3004);
 }
 bootstrap();
