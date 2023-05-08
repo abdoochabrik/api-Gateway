@@ -10,10 +10,8 @@ const AUTH_ROUTES = [...auth_routes];
 const jwtService: JwtService = new JwtService();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: false,
-  });
-  AUTH_ROUTES.forEach((route) => {
+  const app = await NestFactory.create(AppModule);
+  /*AUTH_ROUTES.forEach((route) => {
     app.use(
       route.url,
       createProxyMiddleware({
@@ -21,7 +19,7 @@ async function bootstrap() {
         changeOrigin: true,
       }),
     );
-  });
+  });*/
   app.use(
     '/book/**',
     createProxyMiddleware({
