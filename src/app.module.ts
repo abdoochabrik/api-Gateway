@@ -7,6 +7,7 @@ import { CoreModule } from './_core/core.module';
 import { UserEntity } from './entities/user.entity';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { RoleEntity } from './entities/role.entity';
+
 @Module({
   imports: [
     CoreModule,
