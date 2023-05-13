@@ -25,7 +25,6 @@ export class AuthenticationController {
   public async createUser(
     @Body() user: CreateUserRequestDto,
   ): Promise<MyError | UserModel> {
-    console.log('user', user);
 
     return await this.signUpUseCase.signUp(user);
   }

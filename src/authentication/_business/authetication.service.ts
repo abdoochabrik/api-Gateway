@@ -1,8 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { UserModel } from '../../models/user.model';
-//import { JwtService } from '@nestjs/jwt';
-//import { UserModel } from '../..//user/_business/user.model';
-//import { UserServiceImpl } from '../../user/_business/user.service.implementation';
 import {
   Either,
   left,
@@ -16,10 +13,6 @@ import { UserRepository } from './user.repo';
 export class authenticationService implements authenticationServiceAbstraction {
   constructor(private readonly userRepository: UserRepository) {}
   async getUserByEmail(email: string): Promise<Either<UserModel, MyError>> {
-    const user = await (await this.userRepository.createQueryBuilder())
-      .where('user.email = :email', { email: email })
-      .leftJoinAndSelect('user.role', 'role')
-      .getOne();
     try {
       const user: UserModel = await (
         await this.userRepository.createQueryBuilder()
@@ -52,7 +45,6 @@ export class authenticationService implements authenticationServiceAbstraction {
   }
 
   async create(user: UserModel): Promise<Either<MyError, UserModel>> {
-    console.log('user', user);
     try {
       const savedUser: UserModel = await this.userRepository.createEntity(user);
       return right(savedUser);

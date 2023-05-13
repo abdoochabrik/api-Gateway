@@ -6,20 +6,10 @@ import { jwtConstants } from './constants';
 import { extractTokenFromHeader } from './functions';
 import { auth_routes } from './routes/auth-routes/auth-routes';
 const SERVICE_URL = 'http://localhost:3002';
-const AUTH_ROUTES = [...auth_routes];
 const jwtService: JwtService = new JwtService();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  /*AUTH_ROUTES.forEach((route) => {
-    app.use(
-      route.url,
-      createProxyMiddleware({
-        target: SERVICE_URL,
-        changeOrigin: true,
-      }),
-    );
-  });*/
   app.use(
     '/book/**',
     createProxyMiddleware({
