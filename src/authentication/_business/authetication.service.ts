@@ -20,8 +20,6 @@ export class authenticationService implements authenticationServiceAbstraction {
       .where('user.email = :email', { email: email })
       .leftJoinAndSelect('user.role', 'role')
       .getOne();
-
-    console.log('login', user);
     try {
       const user: UserModel = await (
         await this.userRepository.createQueryBuilder()
@@ -50,6 +48,36 @@ export class authenticationService implements authenticationServiceAbstraction {
           'unkown problem on the database level',
         ),
       );
+    }
+  }
+
+  async create(user: UserModel): Promise<Either<MyError, UserModel>> {
+    console.log('user', user);
+    try {
+      const savedUser: UserModel = await this.userRepository.createEntity(user);
+      return right(savedUser);
+    } catch (error) {
+      if (error.code == 23505) {
+        return left(
+          MyError.createError(
+            HttpStatus.BAD_REQUEST,
+            'email or username already exist',
+            'you can not create two users with same email or username',
+            new Date(),
+            `/api/user`,
+          ),
+        );
+      } else {
+        return left(
+          MyError.createError(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            'internal problem',
+            'unkown problem on the database level',
+            new Date(),
+            `/api/user`,
+          ),
+        );
+      }
     }
   }
 }

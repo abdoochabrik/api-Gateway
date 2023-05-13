@@ -6,7 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { CoreModule } from './_core/core.module';
 import { UserEntity } from './entities/user.entity';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { RoleEntity } from './entities/role.entity';
+import { RoleEntity } from './role/_infrastructure/role.entity';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RoleEntity } from './entities/role.entity';
         synchronize: true,
       }),
     }),
+    RoleModule,
     AuthenticationModule,
   ],
   controllers: [AppController],

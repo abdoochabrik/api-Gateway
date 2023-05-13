@@ -11,7 +11,7 @@ import {
 import { IsEmail } from 'class-validator';
 import { UserModel } from '../models/user.model';
 
-import { RoleEntity } from './role.entity';
+import { RoleEntity } from '../role/_infrastructure/role.entity';
 
 @Entity({ name: 'user_Info' })
 @Unique(['email'])
