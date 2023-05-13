@@ -20,7 +20,6 @@ export class SignUpUseCase {
   public async signUp(
     user: CreateUserRequestDto,
   ): Promise<MyError | UserModel> {
-    console.log('user', user);
     const { role, ...userdata } = user;
     const roleFromDb = (await this.getRoleByTypeUseCase.getRoleByType(
       role,
