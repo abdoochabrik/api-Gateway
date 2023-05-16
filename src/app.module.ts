@@ -8,6 +8,9 @@ import { UserEntity } from './entities/user.entity';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { RoleEntity } from './role/_infrastructure/role.entity';
 import { RoleModule } from './role/role.module';
+import { BookEntity } from './entities/book.entity';
+import { ProfileEntity } from './entities/profile.entity';
+import { FileEntity } from './entities/file.entity';
 
 @Module({
   imports: [
@@ -21,7 +24,13 @@ import { RoleModule } from './role/role.module';
         username: process.env.POSTGRES_USER,
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DATABASE,
-        entities: [UserEntity, RoleEntity],
+        entities: [
+          UserEntity,
+          RoleEntity,
+          BookEntity,
+          ProfileEntity,
+          FileEntity,
+        ],
         synchronize: true,
       }),
     }),
