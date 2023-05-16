@@ -1,8 +1,8 @@
-/*import { BaseEntity } from '../../_core/_infrastructure/base.entity';
+import { BaseEntity } from '../_core/_infrastructure/base.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity('file')
-class FileEntity extends BaseEntity {
+export class FileEntity extends BaseEntity {
   @Column()
   filename?: string;
 
@@ -13,5 +13,4 @@ class FileEntity extends BaseEntity {
   data?: Uint8Array;
 }
 
-export default FileEntity;
-*/
+//export default FileEntity;
