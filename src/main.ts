@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { jwtConstants } from './constants';
 import { extractTokenFromHeader } from './functions';
-import { auth_routes } from './routes/auth-routes/auth-routes';
 const SERVICE_URL = 'http://localhost:3002';
 const jwtService: JwtService = new JwtService();
 
@@ -17,6 +16,7 @@ async function bootstrap() {
       changeOrigin: true,
       onProxyReq: (clientRequest, req, res) => {
         const token = clientRequest.getHeaders().authorization;
+        clientRequest.setHeader('gateWaykey', 'chabrik');
         if (!token) {
           return res.status(401).send('Unauthorized');
         }
@@ -35,6 +35,7 @@ async function bootstrap() {
       target: SERVICE_URL,
       changeOrigin: true,
       onProxyReq: (clientRequest, req, res) => {
+        clientRequest.setHeader('gateWaykey', 'chabrik');
         const token = clientRequest.getHeaders().authorization;
         if (!token) {
           return res.status(401).send('Unauthorized');
@@ -55,6 +56,7 @@ async function bootstrap() {
       changeOrigin: true,
       onProxyReq: (clientRequest, req, res) => {
         const token = clientRequest.getHeaders().authorization;
+        clientRequest.setHeader('gateWaykey', 'chabrik');
         if (!token) {
           return res.status(401).send('Unauthorized');
         }
@@ -74,6 +76,7 @@ async function bootstrap() {
       changeOrigin: true,
       onProxyReq: (clientRequest, req, res) => {
         const token = clientRequest.getHeaders().authorization;
+        clientRequest.setHeader('gateWaykey', 'chabrik');
         if (!token) {
           return res.status(401).send('Unauthorized');
         }
