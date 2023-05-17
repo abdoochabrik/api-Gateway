@@ -49,7 +49,7 @@ async function bootstrap() {
     }),
   );
   app.use(
-    '/role/**',
+    '/role',
     createProxyMiddleware({
       target: SERVICE_URL,
       changeOrigin: true,
