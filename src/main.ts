@@ -30,6 +30,26 @@ async function bootstrap() {
     }),
   );
   app.use(
+    '/secret',
+    createProxyMiddleware({
+      target: SERVICE_URL,
+      changeOrigin: true,
+      onProxyReq: (clientRequest, req, res) => {
+        const token = clientRequest.getHeaders().authorization;
+        clientRequest.setHeader('gateWaykey', 'chabrik');
+        if (!token) {
+          return res.status(401).send('Unauthorized');
+        }
+        const result = jwtService.verifyAsync(extractTokenFromHeader(token), {
+          secret: jwtConstants.secret,
+        });
+        result.catch(() => {
+          return res.status(401).send('Unauthorized');
+        });
+      },
+    }),
+  );
+  app.use(
     '/profile/**',
     createProxyMiddleware({
       target: SERVICE_URL,
