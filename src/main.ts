@@ -36,7 +36,8 @@ async function bootstrap() {
       changeOrigin: true,
       onProxyReq: (clientRequest, req, res) => {
         const token = clientRequest.getHeaders().authorization;
-        clientRequest.setHeader('gateWaykey', 'chabrik');
+        clientRequest.setHeader('gatewaykey', 'chabrik');
+        console.log('key', clientRequest.getHeaders());
         if (!token) {
           return res.status(401).send('Unauthorized');
         }
